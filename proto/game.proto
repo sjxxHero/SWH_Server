@@ -1,0 +1,77 @@
+option java_package = "proto";
+
+//
+// 前后端之间相互通讯的所有消息体
+//
+
+// 这样命名的消息体 
+// m_     是消息体前缀
+// g_     是游戏中vo
+// login_ 是登陆类前缀
+// role_  是角色类前缀
+// equip_ 是装备类前缀
+// skill_ 是技能类前缀
+// fight_ 是战斗类前缀
+// _tos   是发给服务器
+// _toc   是发给客户端
+
+//========================== 账号, 登陆类 =====================================
+message m_login_u3d_login_tos {
+	required string account_name = 1;
+	required string account_pwd  = 2;
+}
+
+// succ 为 false 时, 客户端可以读取 reason 里面的原因，并显示，此时 result 的值没有意义。
+// succ 为 true  时, 客户端可以从 result 中得到账号下的角色列表，此时 reason 的值没有意义。
+message m_login_u3d_login_toc {
+	required bool			succ 	= 1[default = true];
+	optional string 		reason 	= 2;
+	optional g_role_list 	result	= 3;
+}
+
+//========================= 角色类 ===========================================
+// 角色列表，里面是一个数组，数组的每一项，是一个 g_game_role, 可以为空数组
+message g_role_list {
+	repeated g_game_role role = 1;
+}
+
+// 保存单独一个角色的基本数据
+message g_game_role {
+	required int32 					roleid 		= 1;
+	required string 				rolename 	= 2;
+	required int32 					gender 		= 3; // 性别：0男，1女
+	required int32 					skinid 		= 4; // 哪一个人物形象（裸体时，应该加载哪个资源）
+	required int32 					mapid 		= 5; // 应该在哪张地图里
+	required int32 					x 			= 6; // 角色在哪个坐标上
+	required int32 					y 			= 7; //
+	repeated g_game_role_display 	display 	= 8; // 用于在屏幕上显示这个角色还需要些什么数据
+}
+
+message g_game_role_display {
+	required int32 type 	= 1;
+	optional int32 value 	= 2;
+}
+//========================= 聊天类 ==========================================
+//========================= 装备类 ==========================================
+//========================= 技能类 ==========================================
+//========================= 聊天类 ==========================================
+//========================= 聊天类 ==========================================
+//========================= 聊天类 ==========================================
+//========================= 待加各种业务类 ==================================
+
+
+// 下面两个是最开始用于测试的两个通讯结构
+message Person {
+	required string name = 1;
+	required string address = 2;
+	required string phone_number = 3;
+	required int32 age = 4;
+	optional Location location = 5;
+}
+
+message Location {
+    required string region = 1;
+    required string country = 2;
+}
+
+
